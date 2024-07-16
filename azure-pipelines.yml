@@ -1,0 +1,28 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+  branches:
+    include:
+      - main
+      - master
+      - release
+      - azure-pipelines
+  tags:
+    include:
+      - '*'
+
+pool:
+  vmImage: ubuntu-latest
+
+steps:
+- task: mirror-git-repository-vsts-task@1
+  inputs:
+    sourceGitRepositoryUri: '$(Build.Repository.Uri)'
+    sourceGitRepositoryPersonalAccessToken: '$(GITHUB_PAT)'
+    sourceGitRepositoryCloneDirectoryName: 'https://github.com/AgnBc/Arbitrum-Nitro-L2Rollup.git'
+    destinationGitRepositoryUri: 'https://dev.azure.com/LibraChain/GitHub%20-%20Mirrored%20Forks/_git/Arbitrum%20-%20Nitro-L2Rollup'
+    destinationGitRepositoryPersonalAccessToken: '$(AZURE_PAT)'
+    
