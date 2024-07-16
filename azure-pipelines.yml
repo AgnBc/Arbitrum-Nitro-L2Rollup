@@ -25,4 +25,4 @@ steps:
     sourceGitRepositoryCloneDirectoryName: 'https://github.com/AgnBc/Arbitrum-Nitro-L2Rollup.git'
     destinationGitRepositoryUri: 'https://dev.azure.com/LibraChain/GitHub%20-%20Mirrored%20Forks/_git/Arbitrum%20-%20Nitro-L2Rollup'
     destinationGitRepositoryPersonalAccessToken: '$(AZURE_PAT)'
-    
+    additionalGitArguments: '--mirror'
