@@ -27,9 +27,6 @@ steps:
     destinationGitRepositoryPersonalAccessToken: '$(AZURE_PAT)'
     additionalGitArguments: '--mirror'
 
-
-
-
 - script: |
     cd repo
     git submodule update --init --recursive
