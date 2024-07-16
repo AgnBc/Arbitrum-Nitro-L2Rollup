@@ -25,10 +25,10 @@ steps:
     sourceGitRepositoryCloneDirectoryName: 'https://github.com/AgnBc/Arbitrum-Nitro-L2Rollup.git'
     destinationGitRepositoryUri: 'https://dev.azure.com/LibraChain/GitHub%20-%20Mirrored%20Forks/_git/Arbitrum%20-%20Nitro-L2Rollup'
     destinationGitRepositoryPersonalAccessToken: '$(AZURE_PAT)'
-    additionalGitArguments: '--mirror'
+    additionalGitArguments: '--recursive --mirror'
 
-- script: |
-    cd repo
-    git submodule update --init --recursive
-    git push --mirror https://$(AZURE_PAT)@dev.azure.com/LibraChain/GitHub%20-%20Mirrored%20Forks/_git/Arbitrum%20-%20Nitro-L2Rollup
-  displayName: 'Push submodules'
+# - script: |
+#     cd repo
+#     git submodule update --init --recursive
+#     git push --mirror https://$(AZURE_PAT)@dev.azure.com/LibraChain/GitHub%20-%20Mirrored%20Forks/_git/Arbitrum%20-%20Nitro-L2Rollup
+#   displayName: 'Push submodules'
