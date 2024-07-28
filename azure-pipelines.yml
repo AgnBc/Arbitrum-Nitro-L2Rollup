@@ -1,7 +1,49 @@
-# Starter pipeline
-# Start with a minimal pipeline that you can customize to build and deploy your code.
-# Add steps that build, run tests, deploy, and more:
-# https://aka.ms/yaml
+# # Starter pipeline
+# # Start with a minimal pipeline that you can customize to build and deploy your code.
+# # Add steps that build, run tests, deploy, and more:
+# # https://aka.ms/yaml
+
+# trigger:
+#   branches:
+#     include:
+#       - main
+#       - master
+#       - release
+#       - azure-pipelines
+#   tags:
+#     include:
+#       - '*'
+
+# pool:
+#   vmImage: ubuntu-latest
+
+# # steps:
+# # - task: mirror-git-repository-vsts-task@1
+# #   inputs:
+# #     sourceGitRepositoryUri: '$(Build.Repository.Uri)'
+# #     sourceGitRepositoryPersonalAccessToken: '$(GITHUB_PAT)'
+# #     sourceGitRepositoryCloneDirectoryName: 'https://github.com/AgnBc/Arbitrum-Nitro-L2Rollup.git'
+# #     destinationGitRepositoryUri: 'https://dev.azure.com/LibraChain/GitHub%20-%20Mirrored%20Forks/_git/Arbitrum%20-%20Nitro-L2Rollup'
+# #     destinationGitRepositoryPersonalAccessToken: '$(AZURE_PAT)'
+# #     additionalGitArguments: '--recursive --mirror'
+
+# # - script: |
+# #     cd repo
+# #     git submodule update --init --recursive
+# #     git push --mirror https://$(AZURE_PAT)@dev.azure.com/LibraChain/GitHub%20-%20Mirrored%20Forks/_git/Arbitrum%20-%20Nitro-L2Rollup
+# #   displayName: 'Push submodules'
+
+
+
+# steps:
+# - script: |
+#     git clone --recursive $(Build.Repository.Uri) repo
+#     cd repo
+#     git remote set-url --push origin https://$(AZURE_PAT)@dev.azure.com/LibraChain/GitHub%20-%20Mirrored%20Forks/_git/Arbitrum%20-%20Nitro-L2Rollup
+#     git push --mirror
+#     git submodule foreach --recursive 'git remote set-url origin  https://$(AZURE_PAT)@dev.azure.com/LibraChain/GitHub%20-%20Mirrored%20Forks/_git/Arbitrum%20-%20Nitro-L2Rollup; git push --mirror'
+#   displayName: 'Clone and mirror repository with submodules'
+
 
 trigger:
   branches:
@@ -17,29 +59,24 @@ trigger:
 pool:
   vmImage: ubuntu-latest
 
-# steps:
-# - task: mirror-git-repository-vsts-task@1
-#   inputs:
-#     sourceGitRepositoryUri: '$(Build.Repository.Uri)'
-#     sourceGitRepositoryPersonalAccessToken: '$(GITHUB_PAT)'
-#     sourceGitRepositoryCloneDirectoryName: 'https://github.com/AgnBc/Arbitrum-Nitro-L2Rollup.git'
-#     destinationGitRepositoryUri: 'https://dev.azure.com/LibraChain/GitHub%20-%20Mirrored%20Forks/_git/Arbitrum%20-%20Nitro-L2Rollup'
-#     destinationGitRepositoryPersonalAccessToken: '$(AZURE_PAT)'
-#     additionalGitArguments: '--recursive --mirror'
-
-# - script: |
-#     cd repo
-#     git submodule update --init --recursive
-#     git push --mirror https://$(AZURE_PAT)@dev.azure.com/LibraChain/GitHub%20-%20Mirrored%20Forks/_git/Arbitrum%20-%20Nitro-L2Rollup
-#   displayName: 'Push submodules'
-
-
-
 steps:
 - script: |
+    echo "Cloning the main repository..."
     git clone --recursive $(Build.Repository.Uri) repo
     cd repo
+
+    echo "Setting up the remote URL for the main repository..."
     git remote set-url --push origin https://$(AZURE_PAT)@dev.azure.com/LibraChain/GitHub%20-%20Mirrored%20Forks/_git/Arbitrum%20-%20Nitro-L2Rollup
+
+    echo "Pushing the main repository..."
     git push --mirror
-    git submodule foreach --recursive 'git remote set-url origin  https://$(AZURE_PAT)@dev.azure.com/LibraChain/GitHub%20-%20Mirrored%20Forks/_git/Arbitrum%20-%20Nitro-L2Rollup; git push --mirror'
+
+    echo "Updating submodules..."
+    git submodule update --init --recursive
+
+    echo "Setting up the remote URL and pushing submodules..."
+    git submodule foreach --recursive '
+      git remote set-url origin https://$(AZURE_PAT)@dev.azure.com/LibraChain/GitHub%20-%20Mirrored%20Forks/_git/Arbitrum%20-%20Nitro-L2Rollup
+      git push --mirror
+    '
   displayName: 'Clone and mirror repository with submodules'
