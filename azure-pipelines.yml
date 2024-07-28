@@ -65,18 +65,22 @@ steps:
     git clone --recursive $(Build.Repository.Uri) repo
     cd repo
 
+    echo "Fetching to unshallow the repository..."
+    git fetch --unshallow
+
     echo "Setting up the remote URL for the main repository..."
     git remote set-url --push origin https://$(AZURE_PAT)@dev.azure.com/LibraChain/GitHub%20-%20Mirrored%20Forks/_git/Arbitrum%20-%20Nitro-L2Rollup
 
-    echo "Pushing the main repository..."
-    git push --mirror
+    echo "Forcing push of the main repository..."
+    git push --mirror --force
 
     echo "Updating submodules..."
     git submodule update --init --recursive
 
-    echo "Setting up the remote URL and pushing submodules..."
+    echo "Setting up the remote URL and forcing push for submodules..."
     git submodule foreach --recursive '
       git remote set-url origin https://$(AZURE_PAT)@dev.azure.com/LibraChain/GitHub%20-%20Mirrored%20Forks/_git/Arbitrum%20-%20Nitro-L2Rollup
-      git push --mirror
+      git fetch --unshallow
+      git push --mirror --force
     '
   displayName: 'Clone and mirror repository with submodules'
