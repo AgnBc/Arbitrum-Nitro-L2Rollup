@@ -44,7 +44,6 @@
 #     git submodule foreach --recursive 'git remote set-url origin  https://$(AZURE_PAT)@dev.azure.com/LibraChain/GitHub%20-%20Mirrored%20Forks/_git/Arbitrum%20-%20Nitro-L2Rollup; git push --mirror'
 #   displayName: 'Clone and mirror repository with submodules'
 
-
 trigger:
   branches:
     include:
@@ -66,13 +65,13 @@ steps:
     cd repo
 
     echo "Fetching to unshallow the repository..."
-    git fetch --unshallow
+    git fetch --unshallow --no-replace-objects
 
     echo "Setting up the remote URL for the main repository..."
     git remote set-url --push origin https://$(AZURE_PAT)@dev.azure.com/LibraChain/GitHub%20-%20Mirrored%20Forks/_git/Arbitrum%20-%20Nitro-L2Rollup
 
     echo "Forcing push of the main repository..."
-    git push --mirror --force
+    git push --mirror --force --no-replace-objects
 
     echo "Updating submodules..."
     git submodule update --init --recursive
@@ -80,7 +79,7 @@ steps:
     echo "Setting up the remote URL and forcing push for submodules..."
     git submodule foreach --recursive '
       git remote set-url origin https://$(AZURE_PAT)@dev.azure.com/LibraChain/GitHub%20-%20Mirrored%20Forks/_git/Arbitrum%20-%20Nitro-L2Rollup
-      git fetch --unshallow
-      git push --mirror --force
+      git fetch --unshallow --no-replace-objects
+      git push --mirror --force --no-replace-objects
     '
   displayName: 'Clone and mirror repository with submodules'
