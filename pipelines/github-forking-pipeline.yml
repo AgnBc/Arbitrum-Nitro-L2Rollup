@@ -13,7 +13,8 @@ trigger:
       - '*'
 
 pool:
-  vmImage: ubuntu-latest
+  # vmImage: ubuntu-latest
+  name: Default
 
 steps:
 - task: mirror-git-repository-vsts-task@1
